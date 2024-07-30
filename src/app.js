@@ -8,9 +8,13 @@ const {
   loggerMiddleware,
   errorHandlerMiddleware,
 } = require('./middlewares/loggerMiddleware');
+const securityConfig = require('./middlewares/security');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Security Middleware
+securityConfig(app);
 
 // Config Views
 app.set('views', path.join(__dirname, 'views'));
