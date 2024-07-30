@@ -1,5 +1,5 @@
 const AppError = require('../utils/AppError');
-const { getUsers, createUserAPI } = require('../services/api');
+const { getUsers, createUserAPI, getUserId } = require('../services/api');
 
 const listUsers = async (req, res, next) => {
   try {
@@ -23,6 +23,24 @@ const listUsers = async (req, res, next) => {
   }
 };
 
+const getUser = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const user = await getUserId(id);
+
+    if (user) {
+      const locals = {
+        title: user.name,
+        description: user.email,
+        user,
+      };
+
+      res.render('user', locals);
+    }
+  } catch (error) {}
+};
+
 const createUser = async (req, res, next) => {
   try {
     const user = req.body;
@@ -34,6 +52,7 @@ const createUser = async (req, res, next) => {
 };
 
 module.exports = {
+  getUser,
   listUsers,
   createUser,
 };

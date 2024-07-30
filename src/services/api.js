@@ -13,6 +13,15 @@ const getUsers = async () => {
   }
 };
 
+const getUserId = async (id) => {
+  try {
+    const response = await api.get('/users/' + id);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const createUserAPI = async (user) => {
   try {
     const response = await api.post('/users', user);
@@ -22,4 +31,4 @@ const createUserAPI = async (user) => {
   }
 };
 
-module.exports = { getUsers, createUserAPI };
+module.exports = { getUsers, getUserId, createUserAPI };

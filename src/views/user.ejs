@@ -1,0 +1,17 @@
+<h2>User Details</h2>
+
+<div>
+  <div><%= user.name %></div>
+  <div>
+    <%= user.id %> - <%= user.username.toLowerCase() %> - <%=
+    user.email.toLowerCase() %>
+  </div>
+  <button id="backButton">Back</button>
+</div>
+
+<%- contentFor('script') %>
+<script>
+  document.getElementById('backButton').addEventListener('click', () => {
+    window.history.back();
+  });
+</script>
