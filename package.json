@@ -1,0 +1,22 @@
+{
+  "name": "express-demo-web",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app",
+    "dev": "NODE_ENV=development nodemon src/app"
+  },
+  "author": "ahartfelder",
+  "license": "ISC",
+  "description": "Demo website made with express",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0"
+  },
+  "devDependencies": {
+    "dotenv-flow": "^4.1.0",
+    "nodemon": "^3.1.4"
+  }
+}
