@@ -4,11 +4,9 @@ require('dotenv-flow').config();
 const expressLayouts = require('express-ejs-layouts');
 
 const userRoutes = require('./routes/userRoutes');
-const {
-  loggerMiddleware,
-  errorHandlerMiddleware,
-} = require('./middlewares/loggerMiddleware');
+const { loggerMiddleware, errorHandlerMiddleware } = require('./middlewares');
 const securityConfig = require('./middlewares/security');
+const logger = require('./utils/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,18 +27,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(loggerMiddleware);
 
 // Static Files
-app.use(express.static(path.join(__dirname, '../public')));
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 // Routes
 app.use('/users', userRoutes);
 
-app.get('/', (req, res) => {
-  const locals = {
-    title: 'Home Page',
-    description: 'This is home page!',
-  };
-
-  res.render('index', locals);
+app.get('/', (req, res, next) => {
+  try {
+    const locals = {
+      title: 'Home Page',
+      description: 'This is home page!',
+    };
+    res.render('index', locals);
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use(errorHandlerMiddleware);
@@ -51,12 +52,12 @@ const startServer = async () => {
     await new Promise((resolve, reject) => {
       app.listen(PORT, (err) => {
         if (err) return reject(err);
-        console.log(`Listening on port ${PORT}`);
+        logger.info(`Listening on port ${PORT}`);
         resolve();
       });
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    logger.error('Failed to start server:', error);
     process.exit(1);
   }
 };

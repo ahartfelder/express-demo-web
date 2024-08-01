@@ -1,28 +1,25 @@
+const logger = require('../utils/logger');
+
 const loggerMiddleware = (req, res, next) => {
-  const { method, url } = req;
+  if (!req.path.includes('/public/')) {
+    const start = Date.now();
+    let level = 'info';
+    const standardMessage = `${req.method} ${req.url}`;
 
-  console.log(`[INFO] Incoming Request: ${method} ${url}`);
+    logger.info(`Request: ${standardMessage}`);
 
-  res.on('finish', () => {
-    console.log(
-      `[INFO] Request Completed: ${method} ${url} - ${res.statusCode}`
-    );
-  });
+    res.on('finish', () => {
+      const duration = Date.now() - start;
+
+      if (res.statusCode >= 400) level = 'error';
+
+      logger[level](
+        `Response: ${standardMessage} - ${res.statusCode} (${duration}ms)`
+      );
+    });
+  }
 
   next();
 };
 
-const errorHandlerMiddleware = (err, req, res) => {
-  const { method, url } = req;
-
-  console.error(`[ERROR] ${method} ${url} - ${res.statusCode}\n${err.stack}`);
-
-  res
-    .status(err.statusCode || 500)
-    .json({ message: err.message || 'Internal server error' });
-};
-
-module.exports = {
-  loggerMiddleware,
-  errorHandlerMiddleware,
-};
+module.exports = loggerMiddleware;
