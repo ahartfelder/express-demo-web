@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app",
+    "start": "NODE_ENV=production node src/app",
     "dev": "NODE_ENV=development nodemon src/app"
   },
   "author": "ahartfelder",

@@ -1,10 +1,19 @@
+<link rel="stylesheet" href="/public/css/user-details.css" />
+
 <h2>User Details</h2>
 
-<div>
-  <div><%= user.name %></div>
-  <div>
-    <%= user.id %> - <%= user.username.toLowerCase() %> - <%=
-    user.email.toLowerCase() %>
+<div class="user-details">
+  <div class="user-info">
+    <span class="label">Name:</span>
+    <span class="value"><%= user.name %></span>
+  </div>
+  <div class="user-info">
+    <span class="label">Username:</span>
+    <span class="value"><%= user.username.toLowerCase() %></span>
+  </div>
+  <div class="user-info">
+    <span class="label">Email:</span>
+    <span class="value"><%= user.email.toLowerCase() %></span>
   </div>
   <button id="backButton">Back</button>
 </div>

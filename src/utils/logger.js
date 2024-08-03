@@ -3,15 +3,15 @@ const DailyRotateFile = require('winston-daily-rotate-file');
 
 const { combine, timestamp, printf, colorize, json, errors } = format;
 
-const consoleFormat = printf(
-  ({ level, message, timestamp }) => `${timestamp} [${level}]: ${message}`
-);
+const consoleFormat = printf((info) => {
+  const hasDuration =
+    info.message === 'RESPONSE' ? ` (${info.duration}ms)` : '';
+  let isRequest = info.method
+    ? ` ${info.method} ${info.path}${hasDuration}`
+    : '';
 
-const fileFormat = combine(
-  timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  errors({ stack: true }),
-  json()
-);
+  return `${info.timestamp} [${info.level}]: ${info.message}${isRequest}`;
+});
 
 const createDailyRotateTransport = (type) =>
   new DailyRotateFile({
@@ -23,17 +23,23 @@ const createDailyRotateTransport = (type) =>
     maxFiles: '14d',
   });
 
-const infoTransport = createDailyRotateTransport('info');
+const infoTransport = createDailyRotateTransport('http');
 const errorTransport = createDailyRotateTransport('error');
 
 const logger = createLogger({
-  level: 'info',
-  format: fileFormat,
-  transports: [
-    new transports.Console({ format: combine(colorize(), consoleFormat) }),
-    infoTransport,
-    errorTransport,
-  ],
+  level: 'http',
+  format: combine(
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    errors({ stack: true }),
+    json()
+  ),
+  transports: [infoTransport, errorTransport],
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(
+    new transports.Console({ format: combine(colorize(), consoleFormat) })
+  );
+}
 
 module.exports = logger;
