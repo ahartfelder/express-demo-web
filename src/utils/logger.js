@@ -33,13 +33,17 @@ const logger = createLogger({
     errors({ stack: true }),
     json()
   ),
-  transports: [infoTransport, errorTransport],
+  transports: [
+    new transports.Console({ format: combine(colorize(), consoleFormat) }),
+    infoTransport,
+    errorTransport,
+  ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
+/* if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({ format: combine(colorize(), consoleFormat) })
   );
-}
+} */
 
 module.exports = logger;

@@ -12,15 +12,15 @@ const {
 
 const app = express();
 
+// Config middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // Security Middleware
 securityConfig(app);
 
 // Config Views
 configViews(app);
-
-// Config middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 app.use(loggerMiddleware);
 

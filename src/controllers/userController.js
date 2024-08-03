@@ -4,7 +4,7 @@ const { getUsers, createUserAPI, getUserId } = require('../services/api');
 const listUsers = async (req, res, next) => {
   try {
     const users = await getUsers();
-
+    console.log(res.locals.csrfToken);
     if (users.length) {
       const locals = {
         title: 'Users List',

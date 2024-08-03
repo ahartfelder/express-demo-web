@@ -1,13 +1,13 @@
-const { default: axios } = require('axios');
+const { Pool } = require('pg');
 
-const api = axios.create({
-  baseURL: process.env.API_BASE_URL,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
 
 const getUsers = async () => {
   try {
-    const response = await api.get('/users');
-    return response.data;
+    const res = await pool.query('SELECT * FROM users');
+    return res.rows;
   } catch (error) {
     throw error;
   }
@@ -15,17 +15,21 @@ const getUsers = async () => {
 
 const getUserId = async (id) => {
   try {
-    const response = await api.get('/users/' + id);
-    return response.data;
+    const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    return res.rows[0];
   } catch (error) {
     throw error;
   }
 };
 
 const createUserAPI = async (user) => {
+  const { name, email } = user;
   try {
-    const response = await api.post('/users', user);
-    return response.data;
+    const res = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      [name, email]
+    );
+    return res.rows[0];
   } catch (error) {
     throw error;
   }
