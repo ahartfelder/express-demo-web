@@ -4,16 +4,12 @@
 
 <div class="user-details">
   <div class="user-info">
-    <span class="label">Name:</span>
-    <span class="value"><%= user.name %></span>
-  </div>
-  <div class="user-info">
     <span class="label">Username:</span>
-    <span class="value"><%= user.username.toLowerCase() %></span>
+    <span class="value"><%= user.username %></span>
   </div>
   <div class="user-info">
-    <span class="label">Email:</span>
-    <span class="value"><%= user.email.toLowerCase() %></span>
+    <span class="label">Password:</span>
+    <span class="value"><%= user.password_hash %></span>
   </div>
   <button id="backButton">Back</button>
 </div>

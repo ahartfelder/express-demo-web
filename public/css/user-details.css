@@ -22,6 +22,8 @@
 .user-info .value {
   color: #666;
   flex: 1;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 #backButton {

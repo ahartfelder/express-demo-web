@@ -1,50 +1,50 @@
-const AppError = require('../utils/AppError');
-const { getUsers, createUserAPI, getUserId } = require('../services/api');
+const { getUserById, createUser, listUsers } = require('../db/queries/users');
+const { encrypt } = require('../utils/bcrypt');
 
-const listUsers = async (req, res, next) => {
+const listUsersController = async (req, res, next) => {
   try {
-    const users = await getUsers();
-    console.log(res.locals.csrfToken);
-    if (users.length) {
-      const locals = {
-        title: 'Users List',
-        description: 'This is users list',
-        // layout: 'layouts/custom-layout',
-        users,
-      };
+    const users = await listUsers();
 
-      res.render('users', locals);
-      return;
-    }
-
-    throw new AppError('No users', 404);
+    const locals = {
+      title: 'Users List',
+      description: 'This is users list',
+      users,
+    };
+    res.render('users', locals);
   } catch (err) {
     next(err);
   }
 };
 
-const getUser = async (req, res, next) => {
+const getUserController = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const user = await getUserId(id);
+    const user = await getUserById(id);
 
     if (user) {
       const locals = {
-        title: user.name,
-        description: user.email,
+        title: user.username,
+        description: `User details for ${user.username}`,
         user,
       };
 
       res.render('user', locals);
+    } else {
+      res.status(404).send('User not found');
     }
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 
-const createUser = async (req, res, next) => {
+const createUserController = async (req, res, next) => {
   try {
-    const user = req.body;
-    const newUser = await createUserAPI(user);
+    const { username, password } = req.body;
+    const passwordHash = await encrypt(password, 10);
+
+    const newUser = await createUser(username, passwordHash);
+    logger.info(newUser);
     res.redirect('/users');
   } catch (err) {
     next(err);
@@ -52,7 +52,7 @@ const createUser = async (req, res, next) => {
 };
 
 module.exports = {
-  getUser,
-  listUsers,
-  createUser,
+  getUserController,
+  listUsersController,
+  createUserController,
 };

@@ -11,6 +11,8 @@
   "description": "Demo website made with express",
   "dependencies": {
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "connect-pg-simple": "^9.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
@@ -18,6 +20,7 @@
     "express": "^4.19.2",
     "express-ejs-layouts": "^2.5.1",
     "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "pg": "^8.12.0",
     "winston": "^3.13.1",

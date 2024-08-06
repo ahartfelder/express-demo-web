@@ -1,6 +1,7 @@
+const config = require('../config/config');
 const logger = require('./logger');
 
-const PORT = process.env.PORT;
+const PORT = config.PORT;
 
 module.exports = async (app) => {
   try {

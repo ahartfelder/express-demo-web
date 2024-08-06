@@ -1,23 +1,19 @@
 services:
   app:
+    container_name: express_demo_web
     build:
       context: .
       dockerfile: Dockerfile.dev
-    env_file:
-      - .env.development
     ports:
       - '${PORT}:${PORT}'
     depends_on:
       - db
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: ['npm', 'run', 'dev']
 
   db:
+    container_name: postgres_demo_web
     image: postgres:16
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -36,3 +32,4 @@ services:
 
 volumes:
   postgres_data:
+    name: demo_web_db_data

@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-require('dotenv-flow').config();
 
 const { server, configViews } = require('./utils');
 const routes = require('./routes');
