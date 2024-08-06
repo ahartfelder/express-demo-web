@@ -10,7 +10,8 @@ const pool = new Pool({
 
 const appSession = expressSession({
   store: new pgSession({
-    conString: config.DATABASE_URL,
+    pool,
+    createTableIfMissing: true,
   }),
   secret: config.PG_SESSION_SECRET,
   resave: false,
