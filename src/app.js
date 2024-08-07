@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 
 const { server, configViews } = require('./utils');
 const routes = require('./routes');
@@ -12,6 +13,7 @@ const {
 const app = express();
 
 // Config middlewares
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

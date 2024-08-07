@@ -1,5 +1,6 @@
-const { getUserByUsername } = require('../db/queries/users');
-const { validateHash } = require('../utils/bcrypt');
+const { getUserByUsername, createUser } = require('../db/queries/users');
+const { validateHash, encrypt } = require('../utils/bcrypt');
+const logger = require('../utils/logger');
 
 const getLoginController = (req, res, next) => {
   try {
@@ -45,10 +46,16 @@ const getRegisterController = (req, res, next) => {
   }
 };
 
-const postRegisterController = (req, res, next) => {
+const postRegisterController = async (req, res, next) => {
   try {
-    console.log(req.body);
-    res.send('Register completed');
+    const { username, password } = req.body;
+
+    const passwordHash = await encrypt(password, 10);
+
+    const newUser = await createUser(username, passwordHash);
+    req.session.user = { id: newUser.id, username: newUser.username };
+    logger.info(newUser);
+    res.redirect('/p/users');
   } catch (error) {
     next(error);
   }

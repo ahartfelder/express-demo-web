@@ -1,5 +1,8 @@
 const router = require('express').Router();
 
+const validate = require('../middlewares/validate');
+const { loginSchema, registerSchema } = require('../utils/validationSchemas');
+
 const {
   getLoginController,
   postLoginController,
@@ -8,12 +11,15 @@ const {
   logoutController,
 } = require('../controllers/authController');
 
-router.route('/login').get(getLoginController).post(postLoginController);
+router
+  .route('/login')
+  .get(getLoginController)
+  .post(validate(loginSchema), postLoginController);
 
 router
   .route('/register')
   .get(getRegisterController)
-  .post(postRegisterController);
+  .post(validate(registerSchema), postRegisterController);
 
 router.get('/logout', logoutController);
 

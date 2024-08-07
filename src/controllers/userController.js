@@ -1,5 +1,4 @@
-const { getUserById, createUser, listUsers } = require('../db/queries/users');
-const { encrypt } = require('../utils/bcrypt');
+const { getUserById, listUsers } = require('../db/queries/users');
 
 const listUsersController = async (req, res, next) => {
   try {
@@ -38,21 +37,7 @@ const getUserController = async (req, res, next) => {
   }
 };
 
-const createUserController = async (req, res, next) => {
-  try {
-    const { username, password } = req.body;
-    const passwordHash = await encrypt(password, 10);
-
-    const newUser = await createUser(username, passwordHash);
-    logger.info(newUser);
-    res.redirect('/users');
-  } catch (err) {
-    next(err);
-  }
-};
-
 module.exports = {
   getUserController,
   listUsersController,
-  createUserController,
 };
